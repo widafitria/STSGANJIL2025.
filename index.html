@@ -133,10 +133,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#Barang">Data Barang</a>
+                            <a class="nav-link active" href="#barang">Data Barang</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#Penjualan">Data Penjualan</a>
+                            <a class="nav-link" href="#penjualan">Data Penjualan</a>
                         </li>
                     </ul>
                 </div>
@@ -179,7 +179,7 @@
             <!-- Tab Navigasi -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="Barang-tab" data-bs-toggle="tab" data-bs-target="#barang" type="button" role="tab">
+                    <button class="nav-link active" id="barang-tab" data-bs-toggle="tab" data-bs-target="#barang" type="button" role="tab">
                         <i class="fas fa-box"></i> Data Barang
                     </button>
                 </li>
@@ -193,7 +193,7 @@
             <!-- Konten Tab -->
             <div class="tab-content" id="myTabContent">
                 <!-- Tab Data Barang -->
-                <div class="tab-pane fade show active" id="Barang" role="tabpanel">
+                <div class="tab-pane fade show active" id="barang" role="tabpanel">
                     <div class="card mt-3">
                         <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-list"></i> Daftar Barang</h5>
@@ -426,10 +426,10 @@
         const aplikasi = initializeApp(firebaseConfig);
         const basisdata = getFirestore(aplikasi);
 
-        // Fungsi untuk manajemen data barang
+        // Fungsi untuk manajemen data barang - MENGUBAH "barang" MENJADI "Barang"
         export async function tambahBarang(nama, harga, stok) {
             try {
-                const refDokumen = await addDoc(collection(basisdata, "barang"), {
+                const refDokumen = await addDoc(collection(basisdata, "Barang"), {
                     nama: nama,
                     harga: parseInt(harga),
                     stok: parseInt(stok)
@@ -443,7 +443,7 @@
         }
 
         export async function ambilDaftarBarang() {
-            const refDokumen = collection(basisdata, "barang");
+            const refDokumen = collection(basisdata, "Barang");
             const kueri = query(refDokumen, orderBy("nama"));
             const cuplikanKueri = await getDocs(kueri);
 
@@ -462,7 +462,7 @@
 
         export async function hapusBarang(id) {
             try {
-                await deleteDoc(doc(basisdata, "barang", id));
+                await deleteDoc(doc(basisdata, "Barang", id));
                 console.log("Berhasil menghapus data barang");
                 return true;
             } catch (error) {
@@ -474,7 +474,7 @@
         export async function ubahBarang(id, namaBaru, hargaBaru, stokBaru) {
             try {
                 await updateDoc(
-                    doc(basisdata, "barang", id),
+                    doc(basisdata, "Barang", id),
                     { 
                         nama: namaBaru, 
                         harga: parseInt(hargaBaru), 
@@ -490,7 +490,7 @@
         }
 
         export async function ambilBarang(id) {
-            const refDokumen = doc(basisdata, "barang", id);
+            const refDokumen = doc(basisdata, "Barang", id);
             const snapshotDokumen = await getDoc(refDokumen);
             
             if (snapshotDokumen.exists()) {
@@ -514,9 +514,9 @@
                     tanggal: serverTimestamp()
                 });
                 
-                // Kurangi stok barang
+                // Kurangi stok barang - MENGUBAH "barang" MENJADI "Barang"
                 const stokBaru = barang.stok - parseInt(jumlah);
-                await updateDoc(doc(basisdata, "barang", idBarang), { stok: stokBaru });
+                await updateDoc(doc(basisdata, "Barang", idBarang), { stok: stokBaru });
                 
                 console.log("Berhasil menyimpan data penjualan");
                 return true;
@@ -525,7 +525,7 @@
                 return false;
             }
         }
-        
+
         export async function ambilDaftarPenjualan() {
             const refDokumen = collection(basisdata, "penjualan");
             const kueri = query(refDokumen, orderBy("tanggal", "desc"));
@@ -564,9 +564,9 @@
                 const penjualanLama = await ambilPenjualan(id);
                 const barangLama = await ambilBarang(penjualanLama.idBarang);
                 
-                // Kembalikan stok barang lama
+                // Kembalikan stok barang lama - MENGUBAH "barang" MENJADI "Barang"
                 const stokBarangLama = barangLama.stok + penjualanLama.jumlah;
-                await updateDoc(doc(basisdata, "barang", penjualanLama.idBarang), { stok: stokBarangLama });
+                await updateDoc(doc(basisdata, "Barang", penjualanLama.idBarang), { stok: stokBarangLama });
                 
                 // Dapatkan data barang baru untuk mendapatkan nama
                 const barangBaru = await ambilBarang(idBarang);
@@ -582,9 +582,9 @@
                     }
                 );
                 
-                // Kurangi stok barang baru
+                // Kurangi stok barang baru - MENGUBAH "barang" MENJADI "Barang"
                 const stokBarangBaru = barangBaru.stok - parseInt(jumlah);
-                await updateDoc(doc(basisdata, "barang", idBarang), { stok: stokBarangBaru });
+                await updateDoc(doc(basisdata, "Barang", idBarang), { stok: stokBarangBaru });
                 
                 console.log("Berhasil mengubah data penjualan");
                 return true;
@@ -743,7 +743,7 @@
                 alert('Gagal menambahkan barang!');
             }
         });
-        
+
         document.getElementById('btnUpdateBarang').addEventListener('click', async function() {
             const id = document.getElementById('editIdBarang').value;
             const nama = document.getElementById('editNamaBarang').value;
@@ -829,7 +829,7 @@
                 document.getElementById('totalHarga').value = parseInt(harga) * parseInt(jumlah);
             }
         });
-        
+
         document.getElementById('editBarangDijual').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const harga = selectedOption.getAttribute('data-harga');
